@@ -1,0 +1,173 @@
+{
+  "name": "complete-by-llm",
+  "displayName": "Complete by LLM",
+  "description": "Minimal local code autocomplete powered by LM Studio or Ollama.",
+  "version": "0.1.0",
+  "publisher": "complete-by-llm",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jowtheshiba/CompleteByLLM.git"
+  },
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": [
+    "AI"
+  ],
+  "activationEvents": [
+    "onStartupFinished"
+  ],
+  "main": "./out/extension.js",
+  "scripts": {
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "vscode:prepublish": "npm run compile"
+  },
+  "contributes": {
+    "commands": [
+      {
+        "command": "completeByLLM.toggle",
+        "title": "Complete by LLM: Toggle Autocomplete"
+      },
+      {
+        "command": "completeByLLM.trigger",
+        "title": "Complete by LLM: Trigger Suggestion"
+      },
+      {
+        "command": "completeByLLM.openSettings",
+        "title": "Complete by LLM: Open Settings"
+      },
+      {
+        "command": "completeByLLM.acceptAndNextLine",
+        "title": "Complete by LLM: Accept Suggestion and Move Down"
+      }
+    ],
+    "keybindings": [
+      {
+        "command": "completeByLLM.acceptAndNextLine",
+        "key": "tab",
+        "when": "editorTextFocus && inlineSuggestionVisible && !editorReadonly && !suggestWidgetVisible"
+      }
+    ],
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "completeByLLM",
+          "title": "Complete by LLM",
+          "icon": "resources/icon.svg"
+        }
+      ]
+    },
+    "views": {
+      "completeByLLM": [
+        {
+          "id": "completeByLLM.status",
+          "name": "Status"
+        }
+      ]
+    },
+    "menus": {
+      "view/title": [
+        {
+          "command": "completeByLLM.trigger",
+          "when": "view == completeByLLM.status",
+          "group": "navigation",
+          "icon": "$(sparkle)"
+        },
+        {
+          "command": "completeByLLM.toggle",
+          "when": "view == completeByLLM.status",
+          "group": "navigation",
+          "icon": "$(zap)"
+        },
+        {
+          "command": "completeByLLM.openSettings",
+          "when": "view == completeByLLM.status",
+          "group": "navigation",
+          "icon": "$(gear)"
+        }
+      ]
+    },
+    "configuration": {
+      "title": "Complete by LLM",
+      "properties": {
+        "completeByLLM.enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable or disable inline autocomplete."
+        },
+        "completeByLLM.acceptMovesDown": {
+          "type": "boolean",
+          "default": true,
+          "description": "Move the cursor to the next line after accepting a suggestion with Tab."
+        },
+        "completeByLLM.provider": {
+          "type": "string",
+          "enum": [
+            "lmstudio",
+            "ollama",
+            "openai"
+          ],
+          "default": "lmstudio",
+          "description": "LLM provider. LM Studio and OpenAI use an OpenAI-compatible chat API, Ollama uses its native generate API."
+        },
+        "completeByLLM.baseUrl": {
+          "type": "string",
+          "default": "",
+          "description": "Provider base URL. Empty means default: LM Studio http://localhost:1234, Ollama http://localhost:11434."
+        },
+        "completeByLLM.model": {
+          "type": "string",
+          "default": "local-model",
+          "description": "Model name. For Ollama use a pulled model, e.g. llama3.1. For LM Studio use the loaded model id."
+        },
+        "completeByLLM.apiKey": {
+          "type": "string",
+          "default": "",
+          "description": "Optional API key sent as Bearer token."
+        },
+        "completeByLLM.maxTokens": {
+          "type": "number",
+          "default": 128,
+          "minimum": 16,
+          "maximum": 1024,
+          "description": "Maximum completion tokens."
+        },
+        "completeByLLM.temperature": {
+          "type": "number",
+          "default": 0,
+          "minimum": 0,
+          "maximum": 2,
+          "description": "Sampling temperature. 0 keeps completions deterministic."
+        },
+        "completeByLLM.debounceMs": {
+          "type": "number",
+          "default": 300,
+          "minimum": 0,
+          "maximum": 2000,
+          "description": "Delay in milliseconds after typing stops before requesting a completion."
+        },
+        "completeByLLM.prefixChars": {
+          "type": "number",
+          "default": 2000,
+          "minimum": 100,
+          "maximum": 16000,
+          "description": "Number of characters before the cursor sent as context."
+        },
+        "completeByLLM.suffixChars": {
+          "type": "number",
+          "default": 500,
+          "minimum": 0,
+          "maximum": 8000,
+          "description": "Number of characters after the cursor sent as context."
+        }
+      }
+    }
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "@types/vscode": "^1.85.0",
+    "typescript": "^5.4.0"
+  }
+}
