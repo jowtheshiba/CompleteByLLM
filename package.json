@@ -2,7 +2,7 @@
   "name": "complete-by-llm",
   "displayName": "Complete by LLM",
   "description": "Minimal local code autocomplete powered by LM Studio or Ollama.",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "publisher": "complete-by-llm",
   "license": "MIT",
   "repository": {
